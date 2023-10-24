@@ -49,3 +49,73 @@ python-delay-server-info git:(main) ✗ curl localhost:8080
 ```
 
 ---
+
+## load testing with K6
+```sh
+brew install k6 # for Mac
+choco install k6 # for Windows
+```
+
+
+## run load test
+```sh
+# create loadtest.k6.js
+k6 run loadtest.k6.js 
+
+          /\      |‾‾| /‾‾/   /‾‾/   
+     /\  /  \     |  |/  /   /  /    
+    /  \/    \    |     (   /   ‾‾\  
+   /          \   |  |\  \ |  (‾)  | 
+  / __________ \  |__| \__\ \_____/ .io
+
+  execution: local
+     script: loadtest.k6.js
+     output: -
+
+  scenarios: (100.00%) 1 scenario, 1 max VUs, 10m30s max duration (incl. graceful stop):
+           * default: 1 iterations for each of 1 VUs (maxDuration: 10m0s, gracefulStop: 30s)
+
+
+     data_received..................: 284 B 28 B/s
+     data_sent......................: 80 B  7.989081322556462 B/s
+     http_req_blocked...............: avg=1.07ms min=1.07ms med=1.07ms max=1.07ms p(90)=1.07ms p(95)=1.07ms
+     http_req_connecting............: avg=239µs  min=239µs  med=239µs  max=239µs  p(90)=239µs  p(95)=239µs 
+     http_req_duration..............: avg=5.01s  min=5.01s  med=5.01s  max=5.01s  p(90)=5.01s  p(95)=5.01s 
+       { expected_response:true }...: avg=5.01s  min=5.01s  med=5.01s  max=5.01s  p(90)=5.01s  p(95)=5.01s 
+     http_req_failed................: 0.00% ✓ 0                   ✗ 1  
+     http_req_receiving.............: avg=5s     min=5s     med=5s     max=5s     p(90)=5s     p(95)=5s    
+     http_req_sending...............: avg=75µs   min=75µs   med=75µs   max=75µs   p(90)=75µs   p(95)=75µs  
+     http_req_tls_handshaking.......: avg=0s     min=0s     med=0s     max=0s     p(90)=0s     p(95)=0s    
+     http_req_waiting...............: avg=7.22ms min=7.22ms med=7.22ms max=7.22ms p(90)=7.22ms p(95)=7.22ms
+     http_reqs......................: 1     0.099864/s
+     iteration_duration.............: avg=10.01s min=10.01s med=10.01s max=10.01s p(90)=10.01s p(95)=10.01s
+     iterations.....................: 1     0.099864/s
+     vus............................: 1     min=1                 max=1
+     vus_max........................: 1     min=1                 max=1
+
+
+running (00m10.0s), 0/1 VUs, 1 complete and 0 interrupted iterations
+default ✓ [========================] 1 VUs  00m10.0s/10m0s  1/1 iters, 1 per VU
+```
+
+
+--- 
+
+## create script by chrome extention
+https://k6.io/docs/test-authoring/create-tests-from-recordings/using-the-browser-recorder/
+
+1. install chrome extention
+2. record start
+3. load localhost:8080
+4. record stop
+5. export HAR file
+6. convert HAR to k6 script
+7. run k6 script
+
+```sh
+npm install -g har-to-k6
+har-to-k6  new-recording_95235.har -o loadtest.k6.fromHAR.js
+k6 run loadtest.k6.fromHAR.js 
+```
+
+---
