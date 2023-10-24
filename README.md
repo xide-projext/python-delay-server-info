@@ -135,3 +135,55 @@ time for i in range{1..5}; do curl http://0.0.0.0:8080;done
 for i in {1..6}; do
     time curl http://0.0.0.0:8080 &
 done
+
+--- 
+
+## run multi instance in docker swarm
+https://labs.play-with-docker.com/
+
+```sh
+
+docker swarm init --advertise-addr 192.168.0.8
+vi main.py
+python main.py
+vi Dockerfile
+docker build -t delay-server-demo .
+vi Dockerfile 
+docker build -t delay-server-demo .
+docker create service delay-server-demo  
+docker images
+docker create service delay-server-demo  
+```
+
+---
+
+## Push custom image to docker hub
+```sh
+docker login
+docker build --tag martinhong/delay-demo:v4 .
+docker build --platform linux/amd64 --tag martinhong/delay-demo:v4 . # for M1 Mac
+docker image push martinhong/delay-demo:v4
+```
+
+## Run custom image in docker swarm
+```sh
+docker service create   --name my-web-demo   --publish published=8080,target=8080   --replicas 2   martinhong/delay-demo:v4
+docker service ls
+docker service ps my-web-demo
+curl localhost:8080
+
+## Load test with 5 users in sequence and in parallel
+```sh
+time for i in range{1..5}; do curl http://0.0.0.0:8080;done; time
+
+for i in {1..6}; do
+    time curl http://0.0.0.0:8080 &
+done
+
+```
+
+
+# tip
+```sh
+history | cut -c 8-
+```
