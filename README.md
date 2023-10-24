@@ -25,6 +25,11 @@ ost:8080
 ---
 
 ## Build server with Docker
+
+1. create Dockerfile
+https://hub.docker.com/_/python
+
+
 ```sh
 docker build -t delay-server-demo .
 [+] Building 58.0s (10/10) 
@@ -119,3 +124,14 @@ k6 run loadtest.k6.fromHAR.js
 ```
 
 ---
+
+## run load test with 5 users
+```sh
+time for i in range{1..5}; do curl http://0.0.0.0:8080;done
+```
+
+## run load test with 5 users in parallel
+```sh
+for i in {1..6}; do
+    time curl http://0.0.0.0:8080 &
+done
